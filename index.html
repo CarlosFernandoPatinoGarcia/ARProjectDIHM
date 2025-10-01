@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>¡Hola, soy TuNick!</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="styles/styles.css">
+    <!-- A-Frame + extras -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+    <!-- HUD 2D -->
+    <div id="hud">
+        <strong id="nick">Carlosfpg</strong><br>
+        <small id="desc">Hola</small><br>
+        <small><a id="link" href="https://github.com/CarlosFernandoPatinoGarcia" target="_blank">@tu_usuario</a></small>
+    </div>
+
+    <!-- Escena A-Frame -->
+    <a-scene id="scene" background="color: #1a1a2e" vr-mode-ui="enabled: true" cursor="rayOrigin: mouse"
+        renderer="antialias: true; colorManagement: true; physicallyCorrectLights">
+        <!-- Assets -->
+        <a-assets>
+            <a-asset-item id="avatar" src="models/GLB_WavingGesture.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Iluminación -->
+        <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
+        <a-light type="directional" position="2 4 2" color="#ffffff" intensity="0.8"></a-light>
+
+        <!-- Suelo -->
+        <a-plane position="0 0 -4" rotation="-90 0 0" width="12" height="12" color="#0f3460"></a-plane>
+
+        <!-- Avatar -->
+        <a-entity id="personaje" gltf-model="#avatar" position="0 0 -3" scale="1 1 1"
+            animation-mixer="clip: *; loop: repeat; timeScale: 1"></a-entity>
+
+        <!-- Billboard nickname -->
+        <a-text id="billboard" value="TuNick" position="0 2.2 -3" align="center" color="#FFF" font="kelsonsans"
+            width="8" look-at="[camera]"></a-text>
+
+        <!-- Cámara + controles -->
+        <a-entity camera look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 20"
+            position="0 1.6 0"></a-entity>
+    </a-scene>
+
+    <script src="scripts/scene.js"></script>
+</body>
+
+</html>
