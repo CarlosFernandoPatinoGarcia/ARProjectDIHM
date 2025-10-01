@@ -19,7 +19,6 @@ const scene = document.querySelector('a-scene');
 const personaje = document.getElementById('personaje');
 const billboard = document.getElementById('billboard');
 
-// Mensajes de carga / error
 scene.addEventListener('model-loaded', e => {
     if (e.detail.target?.id === 'personaje') {
         console.info('✅ Modelo cargado');
@@ -35,25 +34,22 @@ scene.addEventListener('model-error', e => {
 });
 
 // ---------- BOTÓN AR ----------
-const glb = CONFIG.modelPath;                // mismo archivo
-const usdz = 'models/USDZWaving.usdz';           // USDZ para iOS (crear una vez)
+const glb = CONFIG.modelPath;
+const usdz = 'models/avatar.usdz';
 const arBtn = document.getElementById('arBtn');
 
+// Detectamos AR (Scene Viewer o QuickLook)
 const isAR =
     (/Android/i.test(navigator.userAgent) && window.XRSystem) ||
     /iPhone|iPad/i.test(navigator.userAgent);
 
-if (isAR) arBtn.style.display = 'block';
-
-arBtn.addEventListener('click', () => {
-    if (/Android/i.test(navigator.userAgent)) {
-        // Android → Scene Viewer
-        location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glb)}&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;end;`;
-    } else if (/iPhone|iPad/i.test(navigator.userAgent)) {
-        // iOS → Quick Look
-        const link = document.createElement('a');
-        link.setAttribute('rel', 'ar');
-        link.href = usdz;
-        link.click();
-    }
-});
+if (isAR) {
+    arBtn.style.display = 'block';
+} else {
+    // ✅ Avisamos que no hay AR, pero la escena 3D sigue disponible
+    const msg = document.createElement('div');
+    msg.className = 'no-ar-msg';
+    msg.textContent = 'Modo cámara no disponible en este dispositivo. Disfruta la experiencia 3D.';
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 4000); // se borra tras 4 s
+}
