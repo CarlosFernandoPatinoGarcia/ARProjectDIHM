@@ -5,7 +5,7 @@ const CONFIG = {
     link: 'https://github.com/CarlosFernandoPatinoGarcia',
     modelPath: 'models/GLB_WavingGesture.glb',
     modelPosition: '0 0 -3',
-    billboardText: 'TuNick',
+    billboardText: 'CarlosNick',
     billboardOffset: '0 2.2 -3'
 };
 
@@ -22,4 +22,5 @@ document.querySelector('a-scene').addEventListener('loaded', () => {
     personaje.setAttribute('position', CONFIG.modelPosition);
     billboard.setAttribute('value', CONFIG.billboardText);
     billboard.setAttribute('position', CONFIG.billboardOffset);
+
 });
