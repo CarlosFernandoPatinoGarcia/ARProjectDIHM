@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>¡Hola, soy Carlos!</title>
+    <title>PrimerVistazoAR</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="styles/styles.css">
     <!-- A-Frame + extras -->
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Escena A-Frame -->
-    <a-scene id="scene" background="color: #1a1a2e" vr-mode-ui="enabled: true" cursor="rayOrigin: mouse"
+    <a-scene id="scene" background="color: #b1abe5" vr-mode-ui="enabled: true" cursor="rayOrigin: mouse"
         renderer="antialias: true; colorManagement: true; physicallyCorrectLights">
         <!-- Assets -->
         <a-assets>
@@ -33,25 +33,36 @@
         <a-light type="directional" position="2 4 2" color="#ffffff" intensity="0.8"></a-light>
 
         <!-- Suelo -->
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="12" height="12" color="#0f3460"></a-plane>
+        <a-plane position="0 0 -4" rotation="-90 0 0" width="12" height="12" color="#978d9f"></a-plane>
+
+        <!-- Cartel y texto -->
+        <a-plane position="0 4 -4" rotation="0 0 0" width="5" height="3" color="gray">
+        </a-plane>
+        <a-plane id="cartel" position="0 4 -3.99" rotation="0 0 0" width="4.5" height="2.5" color="black">
+        </a-plane>
+
+        <!-- Línea de diálogo (empieza vacía) -->
+        <a-text id="dialogo" value="" position="0 4 -3.98" rotation="0 0 0" align="center" color="#ffffff"
+            font="kelsonsans" width="6">
+        </a-text>
 
         <!-- Avatar -->
         <a-entity id="personaje" gltf-model="#avatar" position="0 0 -3" scale="1 1 1"
             animation-mixer="clip: *; loop: repeat; timeScale: 1"></a-entity>
 
         <!-- Billboard nickname -->
-        <a-text id="billboard" value="Carlos08" position="0 2.2 -3" align="center" color="#FFF" font="kelsonsans"
+        <a-text id="billboard" value="Carlos08" position="0 2.2 -3" align="center" color="#FFF" font="mozillavr"
             width="8" look-at="[camera]"></a-text>
 
         <!-- Cámara + controles -->
         <a-entity camera look-controls="pointerLockEnabled: false" wasd-controls="acceleration: 20"
             position="0 1.6 0"></a-entity>
     </a-scene>
-
+    <!-- Botón flotante "Ver en AR" -->
     <a id="arBtn" class="ar-button">Ver en tu espacio</a>
 
     <script src="scripts/scene.js"></script>
+
 </body>
 
 </html>
-
