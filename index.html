@@ -51,7 +51,8 @@
             width="8" look-at="[camera]"></a-text>
 
         <!-- Cámara + cursor para click -->
-        <a-entity id="camara" camera position="0 1.6 0" look-controls wasd-controls="acceleration: 20" joystick-controls>
+        <a-entity id="camara" camera position="0 1.6 0" look-controls wasd-controls="acceleration: 20" joystick-controls="stickRadius: 50; deadZone: 5; moveSpeed: 0.1"
+>
             <a-entity cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
         </a-entity>
 
@@ -70,4 +71,5 @@
 </body>
 
 </html>
+
 
