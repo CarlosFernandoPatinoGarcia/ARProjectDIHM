@@ -98,3 +98,20 @@ boton.addEventListener('click', () => {
         miniDialogoBtn.setAttribute('value', 'BOOOM!');
     }
 });
+
+// ---------- Botón AR para móviles ----------
+const arBtn = document.getElementById('arBtn');
+const glbUrl = CONFIG.modelPath;
+const usdzUrl = glbUrl.replace('.glb', '.usdz'); // Suponiendo que tienes la versión .usdz para iOS
+
+if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    // iOS -> Quick Look
+    arBtn.setAttribute('rel', 'ar');
+    arBtn.setAttribute('href', usdzUrl);
+} else if (/Android/i.test(navigator.userAgent)) {
+    // Android -> Scene Viewer
+    arBtn.setAttribute('href', `intent://arvr.google.com/scene-viewer/1.0?file=${glbUrl}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end;`);
+} else {
+    // Otros -> ocultar botón AR
+    arBtn.style.display = 'none';
+}
