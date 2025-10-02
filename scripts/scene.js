@@ -5,7 +5,7 @@ const CONFIG = {
     link: 'https://github.com/CarlosFernandoPatinoGarcia',
     modelPath: 'models/GLBwaving.glb',
     modelPosition: '0 0 -3',
-    billboardText: 'Carlosfpg',
+    billboardText: 'CarlosNPC',
     billboardOffset: '0 2.2 -3'
 };
 
@@ -14,50 +14,16 @@ document.getElementById('nick').textContent = CONFIG.nick;
 document.getElementById('desc').textContent = CONFIG.desc;
 document.getElementById('link').href = CONFIG.link;
 
-// ---------- ESCENA ----------
-const scene = document.querySelector('a-scene');
-const personaje = document.getElementById('personaje');
-const billboard = document.getElementById('billboard');
-
-// Configuramos modelo y billboard cuando cargue
-personaje.addEventListener('model-loaded', () => {
-    console.info('✅ Modelo cargado');
-    personaje.setAttribute('position', CONFIG.modelPosition);
-    billboard.setAttribute('value', CONFIG.billboardText);
-    billboard.setAttribute('position', CONFIG.billboardOffset);
-});
-
-// Manejo de error
-scene.addEventListener('model-error', e => {
-    console.error('❌ Error al cargar modelo:', e.detail.target?.src);
-    alert('No se pudo cargar el modelo 3D.\nComprueba la ruta o el archivo.');
-});
-
-// ---------- BOTÓN AR ----------
-const glb = CONFIG.modelPath;
-const usdz = 'models/USDZWaving.usdz';
-const arBtn = document.getElementById('arBtn');
-
-// Detectamos AR (Scene Viewer o QuickLook)
-const isAR =
-    (/Android/i.test(navigator.userAgent) && window.XRSystem) ||
-    /iPhone|iPad/i.test(navigator.userAgent);
-
-if (isAR) {
-    arBtn.style.display = 'block';
-} else {
-    const msg = document.createElement('div');
-    msg.className = 'no-ar-msg';
-    msg.textContent = 'Modo cámara no disponible en este dispositivo. Disfruta la experiencia 3D.';
-    document.body.appendChild(msg);
-    setTimeout(() => msg.remove(), 4000);
-}
-
-// ---------- DIÁLOGO TIPO RPG ----------
+// ---------- Diálogo RPG ----------
 const frases = [
     "Hola mundo.",
     "Este es mi primer proyecto",
     "con modelos 3D",
+    "Puedes desplazarte con las teclas",
+    "W: Adelante, A: Izquierda",
+    "S: Atras, D: Derecha",
+    "y con el mouse mirar alrededor",
+    "Supongo que eso es todo.",
     "¡Gracias por mirar mi demo!"
 ];
 
@@ -73,13 +39,12 @@ function escribirFrase(frase, callback) {
     const intervalo = setInterval(() => {
         texto.setAttribute('value', texto.getAttribute('value') + frase[i]);
         i++;
-
         if (i >= frase.length) {
             clearInterval(intervalo);
             escribiendo = false;
-            if (callback) setTimeout(callback, 1500); // espera 1.5s y sigue
+            if (callback) setTimeout(callback, 1500);
         }
-    }, 80); // velocidad escritura
+    }, 80);
 }
 
 function mostrarDialogo() {
@@ -91,7 +56,45 @@ function mostrarDialogo() {
 }
 
 // Arranca cuando cargue el avatar
+const personaje = document.getElementById('personaje');
 personaje.addEventListener('model-loaded', () => {
     console.info('✅ Modelo cargado → iniciando diálogo RPG');
+    personaje.setAttribute('position', CONFIG.modelPosition);
+    document.getElementById('billboard').setAttribute('value', CONFIG.billboardText);
     mostrarDialogo();
+});
+
+// ---------- Componente 3D botón ----------
+const miniDialogoBtn = document.getElementById('miniDialogoBtn');
+
+AFRAME.registerComponent('check-distance', {
+    schema: {
+        target: { type: 'selector' },
+        range: { type: 'number', default: 2 }
+    },
+    init() { this.cerca = false; },
+    tick() {
+        const posBoton = this.el.object3D.position;
+        const posCam = this.data.target.object3D.position;
+        const dx = posBoton.x - posCam.x;
+        const dy = posBoton.y - posCam.y;
+        const dz = posBoton.z - posCam.z;
+        const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        if (d < this.data.range && !this.cerca) {
+            this.cerca = true;
+            this.el.setAttribute('color', '#4caf50'); // verde
+        } else if (d >= this.data.range && this.cerca) {
+            this.cerca = false;
+            this.el.setAttribute('color', 'red'); // rojo
+        }
+    }
+});
+
+// ---------- Evento click del botón ----------
+const boton = document.getElementById('boton3d');
+boton.addEventListener('click', () => {
+    if (boton.getAttribute('color') === '#4caf50') {
+        miniDialogoBtn.setAttribute('value', 'BOOOM!');
+    }
 });
